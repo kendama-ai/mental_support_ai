@@ -25,3 +25,9 @@ line_bot.py    # LINE Bot処理
 services.py    # ロジック（中核）
 data/          # 地域・制度データ
 templates/     # HTML
+
+pip install -r requirements.txt
+python app.py
+
+LINE_CHANNEL_ACCESS_TOKEN=
+LINE_CHANNEL_SECRET=
