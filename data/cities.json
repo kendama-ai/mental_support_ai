@@ -1,0 +1,28 @@
+{
+    "川口市": {
+        "city_office": "川口市役所",
+        "departments": {
+            "生活保護": {
+                "name": "生活福祉課",
+                "tel": "048-258-5703",
+                "map": "https://maps.google.com/?q=川口市役所"
+            },
+            "障害福祉": {
+                "name": "障害福祉課",
+                "tel": "048-259-7678",
+                "map": "https://maps.google.com/?q=川口市役所"
+            }
+    }
+},
+
+"さいたま市": {
+    "city_office": "さいたま市役所",
+    "departments": {
+        "生活保護": {
+            "name": "福祉課",
+            "tel": "048-829-1111",
+            "map": "https://maps.google.com/?q=さいたま市役所"
+        }
+    }
+}
+}

@@ -1,0 +1,36 @@
+[
+    {
+        "name": "生活保護",
+        "conditions": {
+            "category": "働けない",
+            "income": "ない"
+        },
+        "score": 100,
+        "department": "生活保護"
+    },
+
+    {
+    "name": "傷病手当金",
+    "conditions": { "category": "休職中" },
+    "score": 85
+    },
+
+    {
+        "name": "失業手当",
+        "conditions": {
+            "category": "働けない",
+            "income": "ある"
+        },
+        "score": 80,
+        "department": "ハローワーク"
+    },
+    
+    {
+        "name": "自立支援医療",
+        "conditions": {
+            "category": "通院している"
+        },
+        "score": 90,
+        "department": "障害福祉"
+    }
+]

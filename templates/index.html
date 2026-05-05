@@ -1,0 +1,176 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    padding: 16px;
+    background: #f5f5f5;
+}
+
+.container {
+    max-width: 500px;
+    margin: auto;
+}
+
+h3 {
+    text-align: center;
+}
+
+.history {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+button {
+    display:block;
+    width:100%;
+    margin:8px 0;
+    padding:16px;
+    border-radius:12px;
+    border:none;
+    background:#4CAF50;
+    color:white;
+    font-size:16px;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.card {
+    background:#fff;
+    padding:16px;
+    border-radius:16px;
+    margin-top:12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.actions a {
+    display:block;
+    margin-top:10px;
+    padding:12px;
+    border-radius:10px;
+    text-align:center;
+    text-decoration:none;
+    color:white;
+}
+
+.map { background:#FF9800; }
+.tel { background:#4CAF50; }
+
+.back-btn {
+    background:#ccc;
+    color:#333;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h3 id="question"></h3>
+
+<div id="history" class="history"></div>
+
+<div id="options"></div>
+
+<div id="result"></div>
+
+<button class="back-btn" onclick="goBack()">← 戻る</button>
+
+</div>
+
+<script>
+
+async function send(message) {
+    const result = document.getElementById("result");
+    result.innerHTML = "考えています...";
+
+    const res = await fetch("/chat", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({message})
+    });
+
+    const data = await res.json();
+
+    if (data.result) {
+        showResult(data.result);
+    } else {
+        renderQuestion(data);
+    }
+}
+
+function renderHistory(history) {
+    const h = document.getElementById("history");
+    h.innerHTML = history.map(x => `・${x}`).join("<br>");
+}
+
+function renderQuestion(data) {
+    document.getElementById("question").innerText = data.question;
+
+    renderHistory(data.history || []);
+
+    const optionsDiv = document.getElementById("options");
+    optionsDiv.innerHTML = "";
+
+    data.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.innerText = opt;
+        btn.onclick = () => send(opt);
+        optionsDiv.appendChild(btn);
+    });
+
+    document.getElementById("result").innerHTML = "";
+}
+
+function showResult(r) {
+    document.getElementById("question").innerText = "あなたにおすすめ";
+
+    document.getElementById("options").innerHTML = "";
+
+    let html = `<div class="card">`;
+    html += `<h3>${r.name}</h3>`;
+    html += `<p>${r.description}</p>`;
+
+    html += `<div class="actions">`;
+
+    if (r.map_url) {
+        html += `<a class="map" href="${r.map_url}" target="_blank">📍 地図を見る</a>`;
+    }
+
+    if (r.tel) {
+        html += `<a class="tel" href="tel:${r.tel}">📞 電話する</a>`;
+    }
+
+    html += `</div></div>`;
+
+    document.getElementById("result").innerHTML = html;
+}
+
+async function goBack() {
+    const res = await fetch("/back", { method: "POST" });
+    const data = await res.json();
+
+    if (data.result) {
+        showResult(data.result);
+    } else {
+        renderQuestion(data);
+    }
+}
+
+// 初期表示
+const INITIAL_QUESTION = {
+    question: "お住まいの地域を選んでください",
+    options: ["川口市", "さいたま市", "その他"]
+};
+
+window.onload = () => renderQuestion(INITIAL_QUESTION);
+
+</script>
+</body>
+</html>
