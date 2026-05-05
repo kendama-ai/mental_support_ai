@@ -1,1 +1,5 @@
-
+```bash
+Flask
+Flask-Session
+line-bot-sdk
+python-dotenv
